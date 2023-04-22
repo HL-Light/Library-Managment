@@ -13,8 +13,8 @@ public class LibraryManagementApplication {
         SpringApplication.run(LibraryManagementApplication.class, args);
     }
 
-    @GetMapping
-    public String health(){
-        return "success";
-    }
+//    @GetMapping
+//    public String health(){
+//        return "success";
+//    }
 }

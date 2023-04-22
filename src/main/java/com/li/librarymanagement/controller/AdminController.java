@@ -1,6 +1,6 @@
 package com.li.librarymanagement.controller;
 
-;
+
 import com.li.librarymanagement.common.Result;
 import com.li.librarymanagement.controller.dto.LoginDTO;
 import com.li.librarymanagement.controller.request.AdminPageRequest;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @CrossOrigin
 @RestController

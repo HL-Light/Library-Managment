@@ -1,5 +1,6 @@
 package com.li.librarymanagement.controller;
 
+
 import com.li.librarymanagement.common.Result;
 import com.li.librarymanagement.controller.request.UserPageRequest;
 import com.li.librarymanagement.entity.User;
@@ -8,14 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-/**
- * @author admin
- * @version 1.0.0
- * @ClassName UserController.java
- * @Description TODO
- * @createTime 2023年04月19日 17:35:00
- */
 
 @CrossOrigin
 @RestController

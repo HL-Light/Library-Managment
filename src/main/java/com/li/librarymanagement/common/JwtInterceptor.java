@@ -26,7 +26,10 @@ public class JwtInterceptor implements HandlerInterceptor {
     private IAdminService adminService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        boolean res = HandlerInterceptor.super.preHandle(request,response,handler);
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+
         String token = request.getHeader("token");
         if (StrUtil.isBlank(token)) {
             token = request.getParameter("token");

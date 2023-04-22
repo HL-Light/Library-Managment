@@ -2,7 +2,6 @@ package com.li.librarymanagement.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.li.librarymanagement.controller.dto.LoginDTO;
@@ -23,9 +22,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-
-@Service
 @Slf4j
+@Service
 public class AdminService implements IAdminService {
 
     @Autowired

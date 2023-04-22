@@ -3,15 +3,8 @@ package com.li.librarymanagement.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.beans.Transient;
 import java.util.Date;
-
-/**
- * @author admin
- * @version 1.0.0
- * @ClassName User.java
- * @Description TODO
- * @createTime 2023年04月19日 17:14:00
- */
 
 @Data
 public class User {
