@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.li.librarymanagement.mapper.RoleMapper">
+
+    <insert id="save">
+        insert into role(id, rolename)
+        values(#{name}, #{username})
+    </insert>
+
+    <update id="updateByid">
+        update roles set rolepath = #{rolepath} where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from role where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.li.librarymanagement.entity.Role">
+        select role.*, roles.rolepath from role inner join roles on role.id = roles.id
+    </select>
+
+
+    <select id="getById" resultType="com.li.librarymanagement.entity.Role">
+        select * from role where id = #{id}
+    </select>
+
+    <select id="getPathById" resultType="com.li.librarymanagement.entity.Role">
+        select * from roles where id = #{id}
+    </select>
+
+</mapper>

@@ -5,13 +5,13 @@
 <mapper namespace="com.li.librarymanagement.mapper.UserMapper">
 
     <insert id="save">
-        insert into user(name, username, age, sex, phone, address, account)
-        values(#{name}, #{username}, #{age}, #{sex}, #{phone}, #{address}, #{account})
+        insert into user(name, username, password, age, sex, phone, address, account,role)
+        values(#{name}, #{username}, #{password}, #{age}, #{sex}, #{phone}, #{address}, #{account},#{role})
     </insert>
 
     <update id="updateById">
-        update user set name = #{name}, age = #{age}, sex = #{sex}, phone = #{phone}, address = #{address}, account = #{account}, status = #{status},
-        updatetime = #{updatetime} where id = #{id}
+        update user set name = #{name}, password = #{password}, age = #{age}, sex = #{sex}, phone = #{phone}, academy = #{academy}, speciality=#{speciality}, classes=#{classes},  address = #{address}, account = #{account}, status = #{status},
+        updatetime = #{updatetime}, role = #{role} where id = #{id}
     </update>
 
     <delete id="deleteById">
@@ -19,17 +19,20 @@
     </delete>
 
     <select id="list" resultType="com.li.librarymanagement.entity.User">
-        select * from user
+        select user.* , role.rolename from user INNER JOIN role ON user.role = role.id
     </select>
 
     <select id="listByCondition" resultType="com.li.librarymanagement.entity.User">
-        select * from user
+        select user.* , role.rolename from user INNER JOIN role ON user.role = role.id
             <where>
                 <if test="name != null and name != ''">
-                    name like concat('%', #{ name }, '%')
+                    user.name like concat('%', #{ name }, '%')
                 </if>
                 <if test="phone != null and phone != ''">
-                    and phone  like concat('%', #{ phone }, '%')
+                    and user.phone  like concat('%', #{ phone }, '%')
+                </if>
+                <if test="classes != null and classes != ''">
+                    and user.classes  like concat('%', #{ classes }, '%')
                 </if>
             </where>
         order by id desc
@@ -40,7 +43,11 @@
     </select>
 
     <select id="getByUsername" resultType="com.li.librarymanagement.entity.User">
-        select * from user where username = #{username}
+        select user.* , roles.rolepath from user INNER JOIN roles ON user.role = roles.id where user.username = #{username}
+    </select>
+
+    <select id="getByLoginname" resultType="com.li.librarymanagement.entity.User">
+        select user.* , roles.rolepath from user INNER JOIN roles ON user.role = roles.id where user.loginname = #{loginname}
     </select>
 
 </mapper>

@@ -6,4 +6,5 @@ import lombok.Data;
 public class UserPageRequest extends BaseRequest{
     private String name;
     private String phone;
+    private String classes;
 }

@@ -117,21 +117,20 @@ public class BorrowService implements IBorrowService {
         borrowMapper.updateStatus("已归还", obj.getId());  // obj.getId() 是前端传来的借书id
 //        obj.setId(null);  // 新数据
         obj.setRealDate(LocalDate.now());
+
         borrowMapper.saveRetur(obj);
 
         // 图书数量增加
         bookMapper.updateNumByNo(obj.getBookNo());
 
-        // 返还和扣除用户积分
+        // 罚款
         Book book = bookMapper.getByNo(obj.getBookNo());
         if (book != null) {
             long until = 0;
-            if (obj.getRealDate().isBefore(obj.getReturnDate())) {
-                until = obj.getRealDate().until(obj.getReturnDate(), ChronoUnit.DAYS);
-            } else if (obj.getRealDate().isAfter(obj.getReturnDate())) {  // 逾期归还，要扣额外的积分
+            if (obj.getRealDate().isAfter(obj.getReturnDate())) {  // 逾期归还，罚款
                 until = -obj.getReturnDate().until(obj.getRealDate(), ChronoUnit.DAYS);
             }
-            int score = (int) until * book.getScore();  // 获取待归还的积分
+            int score = (int) until;
             User user = userMapper.getByUsername(obj.getUserNo());
             int account = user.getAccount() + score;
             user.setAccount(account);

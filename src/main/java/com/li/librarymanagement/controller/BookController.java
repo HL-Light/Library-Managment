@@ -6,6 +6,7 @@ import com.li.librarymanagement.common.Result;
 import com.li.librarymanagement.controller.request.BookPageRequest;
 import com.li.librarymanagement.entity.Admin;
 import com.li.librarymanagement.entity.Book;
+import com.li.librarymanagement.entity.Book_c;
 import com.li.librarymanagement.service.IBookService;
 import com.li.librarymanagement.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @CrossOrigin
@@ -41,12 +43,13 @@ public class BookController {
             FileUtil.mkParentDirs(filePath);  // 创建父级目录
             file.transferTo(FileUtil.file(filePath));
             Admin currentAdmin = TokenUtils.getCurrentAdmin();
-            String token = TokenUtils.genToken(currentAdmin.getId().toString(), currentAdmin.getPassword(), 15);
+            String token = TokenUtils.genToken(currentAdmin.getId().toString(), currentAdmin.getPassword(),currentAdmin.getRole(), 15);
             String url = "http://localhost:9090/api/book/file/download/" + flag + "?&token=" + token;
             if (originalFilename.endsWith("png") || originalFilename.endsWith("jpg") || originalFilename.endsWith("pdf")) {
                 url += "&play=1";
             }
             return Result.success(url);
+//            return Result.success();
         } catch (Exception e) {
             log.info("文件上传失败", e);
         }
@@ -78,7 +81,7 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public Result save(@RequestBody Book obj) {
+    public Result save(@RequestBody Book_c obj) {
         bookService.save(obj);
         return Result.success();
     }
@@ -112,4 +115,13 @@ public class BookController {
         return Result.success(bookService.page(pageRequest));
     }
 
+    @GetMapping("/page_c")
+    public Result page_c(BookPageRequest pageRequest, Integer book_id) {
+        return Result.success(bookService.page_c(pageRequest,book_id));
+    }
+
+    @GetMapping("/bcid/{id}")
+    public Result bcid(@PathVariable Integer id) {
+        return Result.success(bookService.selectByid(id));
+    }
 }

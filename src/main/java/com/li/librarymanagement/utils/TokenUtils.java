@@ -5,7 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import com.li.librarymanagement.controller.dto.LoginDTO;
 import com.li.librarymanagement.entity.Admin;
+import com.li.librarymanagement.entity.User;
 import com.li.librarymanagement.service.IAdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,15 +38,55 @@ public class TokenUtils {
      *
      * @return
      */
-    public static String genToken(String adminId, String sign) {
-        return JWT.create().withAudience(adminId) // 将 user id 保存到 token 里面,作为载荷
+
+    public static String genToken(String Id, String sign) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
                 .withExpiresAt(DateUtil.offsetHour(new Date(), 2)) // 2小时后token过期
                 .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
     }
 
-    public static String genToken(String adminId, String sign, int days) {
-        return JWT.create().withAudience(adminId) // 将 user id 保存到 token 里面,作为载荷
+    public static String genToken(String Id, String sign, Admin admin) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
+                .withClaim("role",admin.getRole())
+                .withClaim("roles",admin.getRolepath())
+                .withExpiresAt(DateUtil.offsetHour(new Date(), 2)) // 2小时后token过期
+                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+    }
+
+    public static String genToken(String Id, String sign, User user) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
+                .withClaim("role",user.getRole())
+                .withClaim("roles",user.getRolepath())
+                .withExpiresAt(DateUtil.offsetHour(new Date(), 2)) // 2小时后token过期
+                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+    }
+
+    public static String genToken(String Id, String sign, int days) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
                 .withExpiresAt(DateUtil.offsetDay(new Date(), days)) // 2小时后token过期
+                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+    }
+
+        public static String genToken(String Id, String sign, String role, int days) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
+                .withClaim("role",role)
+                .withExpiresAt(DateUtil.offsetDay(new Date(), days)) // 2小时后token过期
+                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+    }
+
+    public static String genToken(String Id, String sign, Admin admin, int days) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
+                .withExpiresAt(DateUtil.offsetDay(new Date(), days)) // 2小时后token过期
+                .withClaim("role",admin.getRole())
+                .withClaim("roles",admin.getRolepath())
+                .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
+    }
+
+    public static String genToken(String Id, String sign, User user, int days) {
+        return JWT.create().withAudience(Id) // 将 user id 保存到 token 里面,作为载荷
+                .withExpiresAt(DateUtil.offsetDay(new Date(), days)) // 2小时后token过期
+                .withClaim("role",user.getRole())
+                .withClaim("roles",user.getRolepath())
                 .sign(Algorithm.HMAC256(sign)); // 以 password 作为 token 的密钥
     }
 

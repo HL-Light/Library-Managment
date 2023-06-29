@@ -12,13 +12,16 @@ import com.li.librarymanagement.entity.Admin;
 import com.li.librarymanagement.exception.ServiceException;
 import com.li.librarymanagement.mapper.AdminMapper;
 import com.li.librarymanagement.service.IAdminService;
+import com.li.librarymanagement.utils.MD5Utils;
 import com.li.librarymanagement.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class AdminService implements IAdminService {
     AdminMapper adminMapper;
 
     private static final String DEFAULT_PASS = "123";
-    private static final String PASS_SALT = "qingge";
+    private static final String PASS_SALT = "li";
 
     @Override
     public List<Admin> list() {
@@ -50,7 +53,11 @@ public class AdminService implements IAdminService {
         if (StrUtil.isBlank(obj.getPassword())) {
             obj.setPassword(DEFAULT_PASS);
         }
-        obj.setPassword(securePass(obj.getPassword()));  // 设置md5加密，加盐
+        try {
+            obj.setPassword(MD5Utils.getMD5Str(obj.getPassword()));  // 设置md5加密，加盐
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         try {
             adminMapper.save(obj);
         } catch (DuplicateKeyException e) {
@@ -89,7 +96,12 @@ public class AdminService implements IAdminService {
             throw new ServiceException("用户名或密码错误");
         }
         // 判断密码是否合法
-        String securePass = securePass(request.getPassword());
+        String securePass = null;
+        try {
+            securePass = MD5Utils.getMD5Str(request.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         if (!securePass.equals(admin.getPassword())) {
             throw new ServiceException("用户名或密码错误");
         }
@@ -100,7 +112,7 @@ public class AdminService implements IAdminService {
         BeanUtils.copyProperties(admin, loginDTO);
 
         // 生成token
-        String token = TokenUtils.genToken(String.valueOf(admin.getId()), admin.getPassword());
+        String token = TokenUtils.genToken(String.valueOf(admin.getId()), admin.getPassword(), admin);
         loginDTO.setToken(token);
         return loginDTO;
     }
@@ -108,15 +120,19 @@ public class AdminService implements IAdminService {
     @Override
     public void changePass(PasswordRequest request) {
         // 注意 你要对新的密码进行加密
-        request.setNewPass(securePass(request.getNewPass()));
+        try {
+            request.setNewPass(MD5Utils.getMD5Str(request.getNewPass()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         int count = adminMapper.updatePassword(request);
         if (count <= 0) {
             throw new ServiceException("修改密码失败");
         }
     }
-
-    private String securePass(String password) {
-        return SecureUtil.md5(password + PASS_SALT);
-    }
+//
+//    private String securePass(String password) {
+//        return SecureUtil.md5(password + PASS_SALT);
+//    }
 
 }

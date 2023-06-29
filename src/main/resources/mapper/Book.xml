@@ -17,9 +17,20 @@
         order by id desc
     </select>
 
+    <select id="listByid" resultType="com.li.librarymanagement.entity.Book_c">
+        SELECT book_c.*, book.name, book.book_no, book.description, book.publish_date, book.author, book.publisher, book.category, book.cover, book.createtime, book.updatetime FROM book_c INNER JOIN book ON book_c.book_id = book.id
+        WHERE book_c.book_id = #{book_id}
+        order by id desc
+    </select>
+
     <insert id="save">
         insert into book(name, description, publish_date, author, publisher, category, book_no, cover, score, nums)
         values(#{name}, #{description}, #{publishDate}, #{author}, #{publisher}, #{category}, #{bookNo}, #{cover}, #{score}, #{nums})
+    </insert>
+
+    <insert id="bcsave">
+        insert into book_c(book_id, adress)
+        values( #{book_id}, #{adress})
     </insert>
 
     <update id="updateById">
@@ -45,5 +56,9 @@
     </select>
     <select id="getByNo" resultType="com.li.librarymanagement.entity.Book">
         select * from book where book_no = #{bookNo}
+    </select>
+
+    <select id="selectByid" resultType="com.li.librarymanagement.entity.Book_c">
+        select * from book_c where book_id = #{book_id}
     </select>
 </mapper>

@@ -2,6 +2,10 @@ package com.li.librarymanagement.controller;
 
 
 import com.li.librarymanagement.common.Result;
+import com.li.librarymanagement.controller.dto.LoginDTO;
+import com.li.librarymanagement.controller.dto.UserLoginDTO;
+import com.li.librarymanagement.controller.request.LoginRequest;
+import com.li.librarymanagement.controller.request.UserLoginRequest;
 import com.li.librarymanagement.controller.request.UserPageRequest;
 import com.li.librarymanagement.entity.User;
 import com.li.librarymanagement.service.IUserService;
@@ -17,6 +21,15 @@ public class UserController {
 
     @Autowired
     IUserService userService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody LoginRequest request) {
+        UserLoginRequest userLoginRequest = new UserLoginRequest();
+        userLoginRequest.setLoginname(request.getUsername());
+        userLoginRequest.setPassword(request.getPassword());
+        UserLoginDTO login = userService.login(userLoginRequest);
+        return Result.success(login);
+    }
 
     @PostMapping("/save")
     public Result save(@RequestBody User user) {

@@ -26,4 +26,6 @@ public interface UserMapper {
 
     User getByUsername(String username);
 
+    User getByLoginname(String loginname);
+
 }

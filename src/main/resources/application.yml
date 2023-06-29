@@ -2,34 +2,19 @@ server:
   port: 9090
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/library-management?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/library-management?serverTimezone=GMT%2b8
     username: root
     password: 123456
-#    dbcp2:
-#      min-idle: 1
-#      initial-size: 1
-#      max-idle: 5
-#      max-wait-millis: 200
-
-
-#redis:
-#  host: 127.0.0.1
-#  port: 6379
-#  password:
-#  connect-timeout: 10s
-#  lettuce:
-#    pool:
-#      max-active: 8
-#      max-wait: 200s
-#      max-idle: 8
-#      min-idle: 0
-
 
 mybatis:
-    mapper-locations: classpath:mapper/*.xml
-    configuration:
-      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-      map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
